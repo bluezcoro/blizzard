@@ -863,135 +863,217 @@ function LoadMainHub()
             if JumpRow.Enabled then ApplyJumpValue() end
         end)
 
-        -- USERNAME CHECKER SECTION
-        local UsernameTitle = Instance.new("TextLabel")
-        UsernameTitle.Size = UDim2.new(1,-30,0,25)
-        UsernameTitle.Position = UDim2.new(0,15,0,255)
-        UsernameTitle.BackgroundTransparency = 1
-        UsernameTitle.Font = Enum.Font.GothamBold
-        UsernameTitle.Text = "👤 PLAYER CHECKER"
-        UsernameTitle.TextColor3 = Color3.new(1,1,1)
-        UsernameTitle.Parent = Frame
+        -- SERVER PLAYER LIST SECTION
+local ServerListTitle = Instance.new("TextLabel")
+ServerListTitle.Size = UDim2.new(1, -30, 0, 25)
+ServerListTitle.Position = UDim2.new(0,15,0,255)
+ServerListTitle.BackgroundTransparency = 1
+ServerListTitle.Font = Enum.Font.GothamBold
+ServerListTitle.Text = "👥 SERVER PLAYER LIST"
+ServerListTitle.TextColor3 = Color3.new(1,1,1)
+ServerListTitle.Parent = Frame
 
-        local UsernameBox = Instance.new("TextBox")
-        UsernameBox.Size = UDim2.new(1,-30,0,35)
-        UsernameBox.Position = UDim2.new(0,15,0,290)
-        UsernameBox.BackgroundColor3 = Color3.fromRGB(38,38,38)
-        UsernameBox.PlaceholderText = "Enter username..."
-        UsernameBox.TextColor3 = Color3.new(1,1,1)
-        UsernameBox.Parent = Frame
-        Instance.new("UICorner", UsernameBox).CornerRadius = UDim.new(0,8)
-        AddRainbowGlow(UsernameBox,3)
+local PlayerListFrame = Instance.new("ScrollingFrame")
+PlayerListFrame.Size = UDim2.new(1, -30, 0, 165)
+PlayerListFrame.Position = UDim2.new(0,15,0,290)
+PlayerListFrame.BackgroundColor3 = Color3.fromRGB(38,38,38)
+PlayerListFrame.BorderSizePixel = 0
+PlayerListFrame.CanvasSize = UDim2.new(0,0,0,0)
+PlayerListFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+PlayerListFrame.ScrollBarThickness = 6
+PlayerListFrame.Parent = Frame
+Instance.new("UICorner", PlayerListFrame).CornerRadius = UDim.new(0,8)
+AddRainbowGlow(PlayerListFrame,3)
 
-        local StatusLabel = Instance.new("TextLabel")
-        StatusLabel.Size = UDim2.new(1,-30,0,25)
-        StatusLabel.Position = UDim2.new(0,15,0,335)
-        StatusLabel.BackgroundTransparency = 1
-        StatusLabel.Font = Enum.Font.Gotham
-        StatusLabel.Text = "Status: None"
-        StatusLabel.TextColor3 = Color3.fromRGB(200,200,200)
-        StatusLabel.Parent = Frame
+local InfoFrame = Instance.new("Frame")
+InfoFrame.Size = UDim2.new(1,-30,0,150)
+InfoFrame.Position = UDim2.new(0,15,0,468)
+InfoFrame.BackgroundColor3 = Color3.fromRGB(28,28,38)
+InfoFrame.Parent = Frame
+Instance.new("UICorner", InfoFrame).CornerRadius = UDim.new(0,8)
+AddRainbowGlow(InfoFrame,3)
 
-        local JoinBtn = Instance.new("TextButton")
-        JoinBtn.Size = UDim2.new(0,200,0,35)
-        JoinBtn.Position = UDim2.new(0,15,0,370)
-        JoinBtn.BackgroundColor3 = Color3.fromRGB(25,140,255)
-        JoinBtn.Text = "🔍 ANALYZE"
-        JoinBtn.TextColor3 = Color3.new(1,1,1)
-        JoinBtn.Font = Enum.Font.GothamBold
-        JoinBtn.Parent = Frame
-        Instance.new("UICorner", JoinBtn).CornerRadius = UDim.new(0,8)
-        AddRainbowGlow(JoinBtn,3)
+local InfoTitle = Instance.new("TextLabel")
+InfoTitle.Size = UDim2.new(1,-20,0,22)
+InfoTitle.Position = UDim2.new(0,10,0,8)
+InfoTitle.BackgroundTransparency = 1
+InfoTitle.Font = Enum.Font.GothamBold
+InfoTitle.Text = "PLAYER INFO"
+InfoTitle.TextColor3 = Color3.fromRGB(0,200,255)
+InfoTitle.Parent = InfoFrame
 
-        local TeleportBtn = Instance.new("TextButton")
-        TeleportBtn.Size = UDim2.new(0,200,0,35)
-        TeleportBtn.Position = UDim2.new(0,225,0,370)
-        TeleportBtn.BackgroundColor3 = Color3.fromRGB(30,180,100)
-        TeleportBtn.Text = "📍 JOIN PLAYER"
-        TeleportBtn.TextColor3 = Color3.new(1,1,1)
-        TeleportBtn.Font = Enum.Font.GothamBold
-        TeleportBtn.Parent = Frame
-        Instance.new("UICorner", TeleportBtn).CornerRadius = UDim.new(0,8)
-        AddRainbowGlow(TeleportBtn,3)
+local InfoName = Instance.new("TextLabel")
+InfoName.Size = UDim2.new(1,-20,0,20)
+InfoName.Position = UDim2.new(0,10,0,35)
+InfoName.BackgroundTransparency = 1
+InfoName.Font = Enum.Font.Gotham
+InfoName.Text = "Username: None"
+InfoName.TextXAlignment = Enum.TextXAlignment.Left
+InfoName.TextColor3 = Color3.new(1,1,1)
+InfoName.Parent = InfoFrame
 
-        JoinBtn.MouseButton1Click:Connect(function()
-            local username = UsernameBox.Text:gsub("%s+", "")
-            if username == "" then
-                StatusLabel.Text = "Status: Enter a username!"
-                StatusLabel.TextColor3 = Color3.fromRGB(255,100,100)
-                return
+local InfoDisplay = Instance.new("TextLabel")
+InfoDisplay.Size = UDim2.new(1,-20,0,20)
+InfoDisplay.Position = UDim2.new(0,10,0,58)
+InfoDisplay.BackgroundTransparency = 1
+InfoDisplay.Font = Enum.Font.Gotham
+InfoDisplay.Text = "Display Name: None"
+InfoDisplay.TextXAlignment = Enum.TextXAlignment.Left
+InfoDisplay.TextColor3 = Color3.new(1,1,1)
+InfoDisplay.Parent = InfoFrame
+
+local InfoAge = Instance.new("TextLabel")
+InfoAge.Size = UDim2.new(1,-20,0,20)
+InfoAge.Position = UDim2.new(0,10,0,81)
+InfoAge.BackgroundTransparency = 1
+InfoAge.Font = Enum.Font.Gotham
+InfoAge.Text = "Account Age: None"
+InfoAge.TextXAlignment = Enum.TextXAlignment.Left
+InfoAge.TextColor3 = Color3.new(1,1,1)
+InfoAge.Parent = InfoFrame
+
+local InfoStatus = Instance.new("TextLabel")
+InfoStatus.Size = UDim2.new(1,-20,0,20)
+InfoStatus.Position = UDim2.new(0,10,0,104)
+InfoStatus.BackgroundTransparency = 1
+InfoStatus.Font = Enum.Font.Gotham
+InfoStatus.Text = "Status: Select a player"
+InfoStatus.TextXAlignment = Enum.TextXAlignment.Left
+InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
+InfoStatus.Parent = InfoFrame
+
+local TPBtn = Instance.new("TextButton")
+TPBtn.Size = UDim2.new(0,200,0,30)
+TPBtn.Position = UDim2.new(0.5,-100,0,128)
+TPBtn.BackgroundColor3 = Color3.fromRGB(30,180,100)
+TPBtn.Text = "📍 TP TO PLAYER"
+TPBtn.TextColor3 = Color3.new(1,1,1)
+TPBtn.Font = Enum.Font.GothamBold
+TPBtn.Parent = InfoFrame
+Instance.new("UICorner", TPBtn).CornerRadius = UDim.new(0,8)
+AddRainbowGlow(TPBtn,3)
+
+local SelectedPlayer = nil
+
+local function RefreshServerList()
+    for _, child in ipairs(PlayerListFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+
+    local playerList = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(playerList, player)
+    end
+
+    table.sort(playerList, function(a, b)
+        return (a.DisplayName or a.Name):lower() < (b.DisplayName or b.Name):lower()
+    end)
+
+    local y = 0
+    for _, player in ipairs(playerList) do
+        local PlayerBtn = Instance.new("TextButton")
+        PlayerBtn.Size = UDim2.new(1,-12,0,30)
+        PlayerBtn.Position = UDim2.new(0,6,0,y)
+        PlayerBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+        PlayerBtn.Text = player.DisplayName .. " | @" .. player.Name
+        PlayerBtn.TextColor3 = Color3.new(1,1,1)
+        PlayerBtn.Font = Enum.Font.GothamBold
+        PlayerBtn.TextSize = 13
+        PlayerBtn.AutoButtonColor = false
+        PlayerBtn.Parent = PlayerListFrame
+        Instance.new("UICorner", PlayerBtn).CornerRadius = UDim.new(0,7)
+        AddRainbowGlow(PlayerBtn,2)
+
+        PlayerBtn.MouseButton1Click:Connect(function()
+            SelectedPlayer = player
+
+            InfoName.Text = "Username: " .. player.Name
+            InfoDisplay.Text = "Display Name: " .. player.DisplayName
+            InfoAge.Text = "Account Age: " .. tostring(player.AccountAge) .. " days"
+
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                InfoStatus.Text = "Status: In server"
+                InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
+            else
+                InfoStatus.Text = "Status: Offline / not in world"
+                InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
             end
 
-            StatusLabel.Text = "Status: Checking..."
-            StatusLabel.TextColor3 = Color3.fromRGB(255,200,50)
-
-            local found = false
-            for _, player in ipairs(Players:GetPlayers()) do
-                if player.Name:lower() == username:lower() then
-                    found = true
-                    if player.Character then
-                        StatusLabel.Text = "Status: 🟢 IN THIS GAME"
-                        StatusLabel.TextColor3 = Color3.fromRGB(80,255,120)
-                    else
-                        StatusLabel.Text = "Status: 🟡 LOADING..."
-                        StatusLabel.TextColor3 = Color3.fromRGB(255,255,100)
-                    end
-                    break
+            for _, child in ipairs(PlayerListFrame:GetChildren()) do
+                if child:IsA("TextButton") then
+                    child.BackgroundColor3 = Color3.fromRGB(50,50,50)
                 end
             end
-
-            if not found then
-                StatusLabel.Text = "Status: 🔴 NOT IN THIS SERVER"
-                StatusLabel.TextColor3 = Color3.fromRGB(255,100,100)
-            end
+            PlayerBtn.BackgroundColor3 = Color3.fromRGB(25,120,25)
         end)
 
-        TeleportBtn.MouseButton1Click:Connect(function()
-            local username = UsernameBox.Text:gsub("%s+", "")
-            if username == "" then
-                StatusLabel.Text = "Status: Enter a username!"
-                StatusLabel.TextColor3 = Color3.fromRGB(255,100,100)
-                return
-            end
+        y += 34
+    end
 
-            StatusLabel.Text = "Status: Attempting..."
-            StatusLabel.TextColor3 = Color3.fromRGB(255,200,50)
+    PlayerListFrame.CanvasSize = UDim2.new(0,0,0, math.max(y, 0))
+end
 
-            -- Try joining in same game first
-            local targetPlayer = nil
-            for _, player in ipairs(Players:GetPlayers()) do
-                if player.Name:lower() == username:lower() then
-                    targetPlayer = player
-                    break
-                end
-            end
+local function UpdateSelectedInfo()
+    if not SelectedPlayer then
+        InfoName.Text = "Username: None"
+        InfoDisplay.Text = "Display Name: None"
+        InfoAge.Text = "Account Age: None"
+        InfoStatus.Text = "Status: Select a player"
+        InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
+        return
+    end
 
-            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if myRoot then
-                    myRoot.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(5, 0, 0)
-                    StatusLabel.Text = "Status: ✅ Teleported!"
-                    StatusLabel.TextColor3 = Color3.fromRGB(80,255,120)
-                end
-                return
-            end
+    InfoName.Text = "Username: " .. SelectedPlayer.Name
+    InfoDisplay.Text = "Display Name: " .. SelectedPlayer.DisplayName
+    InfoAge.Text = "Account Age: " .. tostring(SelectedPlayer.AccountAge) .. " days"
 
-            -- If not in same game, try to teleport to their game
-            StatusLabel.Text = "Status: Joining their game..."
-            StatusLabel.TextColor3 = Color3.fromRGB(255,200,50)
-            
-            pcall(function()
-                TeleportService:Teleport(game.PlaceId, LocalPlayer)
-                StatusLabel.Text = "Status: ✅ Teleporting..."
-                StatusLabel.TextColor3 = Color3.fromRGB(80,255,120)
-            end)
-            
-            task.wait(2)
-            if targetPlayer == nil or not targetPlayer.Parent then
-                StatusLabel.Text = "Status: Player not found in game!"
-                StatusLabel.TextColor3 = Color3.fromRGB(255,100,100)
-            end
-        end)
+    if SelectedPlayer.Character and SelectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        InfoStatus.Text = "Status: In server"
+        InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
+    else
+        InfoStatus.Text = "Status: Offline / not in world"
+        InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
+    end
+end
+
+RefreshServerList()
+UpdateSelectedInfo()
+
+Players.PlayerAdded:Connect(function()
+    RefreshServerList()
+    UpdateSelectedInfo()
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    if SelectedPlayer and SelectedPlayer == player then
+        SelectedPlayer = nil
+    end
+    RefreshServerList()
+    UpdateSelectedInfo()
+end)
+
+TPBtn.MouseButton1Click:Connect(function()
+    if not SelectedPlayer then
+        InfoStatus.Text = "Status: Select a player first"
+        InfoStatus.TextColor3 = Color3.fromRGB(255,200,50)
+        return
+    end
+
+    local targetPlayer = SelectedPlayer
+    local targetRoot = targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local localRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+    if targetRoot and localRoot then
+        localRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 3, 0)
+        InfoStatus.Text = "Status: Teleported!"
+        InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
+    else
+        InfoStatus.Text = "Status: Target is not in world"
+        InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
+    end
+end)
 
         -- Apply saved states on load
         if SavedSpeedEnabled then ApplySpeedValue() end
