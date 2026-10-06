@@ -863,215 +863,58 @@ function LoadMainHub()
             if JumpRow.Enabled then ApplyJumpValue() end
         end)
 
-        -- SERVER PLAYER LIST SECTION
-local ServerListTitle = Instance.new("TextLabel")
-ServerListTitle.Size = UDim2.new(1, -30, 0, 25)
-ServerListTitle.Position = UDim2.new(0,15,0,255)
-ServerListTitle.BackgroundTransparency = 1
-ServerListTitle.Font = Enum.Font.GothamBold
-ServerListTitle.Text = "👥 SERVER PLAYER LIST"
-ServerListTitle.TextColor3 = Color3.new(1,1,1)
-ServerListTitle.Parent = Frame
+        local FollowBtn = Instance.new("TextButton")
+FollowBtn.Size = UDim2.new(0,200,0,30)
+FollowBtn.Position = UDim2.new(0.5,-100,0,163)
+FollowBtn.BackgroundColor3 = Color3.fromRGB(255,165,0)
+FollowBtn.Text = "👁️ FOLLOW PLAYER"
+FollowBtn.TextColor3 = Color3.new(1,1,1)
+FollowBtn.Font = Enum.Font.GothamBold
+FollowBtn.Parent = InfoFrame
+Instance.new("UICorner", FollowBtn).CornerRadius = UDim.new(0,8)
+AddRainbowGlow(FollowBtn,3)
 
-local PlayerListFrame = Instance.new("ScrollingFrame")
-PlayerListFrame.Size = UDim2.new(1, -30, 0, 165)
-PlayerListFrame.Position = UDim2.new(0,15,0,290)
-PlayerListFrame.BackgroundColor3 = Color3.fromRGB(38,38,38)
-PlayerListFrame.BorderSizePixel = 0
-PlayerListFrame.CanvasSize = UDim2.new(0,0,0,0)
-PlayerListFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-PlayerListFrame.ScrollBarThickness = 6
-PlayerListFrame.Parent = Frame
-Instance.new("UICorner", PlayerListFrame).CornerRadius = UDim.new(0,8)
-AddRainbowGlow(PlayerListFrame,3)
+local IsFollowing = false
 
-local InfoFrame = Instance.new("Frame")
-InfoFrame.Size = UDim2.new(1,-30,0,150)
-InfoFrame.Position = UDim2.new(0,15,0,468)
-InfoFrame.BackgroundColor3 = Color3.fromRGB(28,28,38)
-InfoFrame.Parent = Frame
-Instance.new("UICorner", InfoFrame).CornerRadius = UDim.new(0,8)
-AddRainbowGlow(InfoFrame,3)
-
-local InfoTitle = Instance.new("TextLabel")
-InfoTitle.Size = UDim2.new(1,-20,0,22)
-InfoTitle.Position = UDim2.new(0,10,0,8)
-InfoTitle.BackgroundTransparency = 1
-InfoTitle.Font = Enum.Font.GothamBold
-InfoTitle.Text = "PLAYER INFO"
-InfoTitle.TextColor3 = Color3.fromRGB(0,200,255)
-InfoTitle.Parent = InfoFrame
-
-local InfoName = Instance.new("TextLabel")
-InfoName.Size = UDim2.new(1,-20,0,20)
-InfoName.Position = UDim2.new(0,10,0,35)
-InfoName.BackgroundTransparency = 1
-InfoName.Font = Enum.Font.Gotham
-InfoName.Text = "Username: None"
-InfoName.TextXAlignment = Enum.TextXAlignment.Left
-InfoName.TextColor3 = Color3.new(1,1,1)
-InfoName.Parent = InfoFrame
-
-local InfoDisplay = Instance.new("TextLabel")
-InfoDisplay.Size = UDim2.new(1,-20,0,20)
-InfoDisplay.Position = UDim2.new(0,10,0,58)
-InfoDisplay.BackgroundTransparency = 1
-InfoDisplay.Font = Enum.Font.Gotham
-InfoDisplay.Text = "Display Name: None"
-InfoDisplay.TextXAlignment = Enum.TextXAlignment.Left
-InfoDisplay.TextColor3 = Color3.new(1,1,1)
-InfoDisplay.Parent = InfoFrame
-
-local InfoAge = Instance.new("TextLabel")
-InfoAge.Size = UDim2.new(1,-20,0,20)
-InfoAge.Position = UDim2.new(0,10,0,81)
-InfoAge.BackgroundTransparency = 1
-InfoAge.Font = Enum.Font.Gotham
-InfoAge.Text = "Account Age: None"
-InfoAge.TextXAlignment = Enum.TextXAlignment.Left
-InfoAge.TextColor3 = Color3.new(1,1,1)
-InfoAge.Parent = InfoFrame
-
-local InfoStatus = Instance.new("TextLabel")
-InfoStatus.Size = UDim2.new(1,-20,0,20)
-InfoStatus.Position = UDim2.new(0,10,0,104)
-InfoStatus.BackgroundTransparency = 1
-InfoStatus.Font = Enum.Font.Gotham
-InfoStatus.Text = "Status: Select a player"
-InfoStatus.TextXAlignment = Enum.TextXAlignment.Left
-InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
-InfoStatus.Parent = InfoFrame
-
-local TPBtn = Instance.new("TextButton")
-TPBtn.Size = UDim2.new(0,200,0,30)
-TPBtn.Position = UDim2.new(0.5,-100,0,128)
-TPBtn.BackgroundColor3 = Color3.fromRGB(30,180,100)
-TPBtn.Text = "📍 TP TO PLAYER"
-TPBtn.TextColor3 = Color3.new(1,1,1)
-TPBtn.Font = Enum.Font.GothamBold
-TPBtn.Parent = InfoFrame
-Instance.new("UICorner", TPBtn).CornerRadius = UDim.new(0,8)
-AddRainbowGlow(TPBtn,3)
-
-local SelectedPlayer = nil
-
-local function RefreshServerList()
-    for _, child in ipairs(PlayerListFrame:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-
-    local playerList = {}
-    for _, player in ipairs(Players:GetPlayers()) do
-        table.insert(playerList, player)
-    end
-
-    table.sort(playerList, function(a, b)
-        return (a.DisplayName or a.Name):lower() < (b.DisplayName or b.Name):lower()
-    end)
-
-    local y = 0
-    for _, player in ipairs(playerList) do
-        local PlayerBtn = Instance.new("TextButton")
-        PlayerBtn.Size = UDim2.new(1,-12,0,30)
-        PlayerBtn.Position = UDim2.new(0,6,0,y)
-        PlayerBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
-        PlayerBtn.Text = player.DisplayName .. " | @" .. player.Name
-        PlayerBtn.TextColor3 = Color3.new(1,1,1)
-        PlayerBtn.Font = Enum.Font.GothamBold
-        PlayerBtn.TextSize = 13
-        PlayerBtn.AutoButtonColor = false
-        PlayerBtn.Parent = PlayerListFrame
-        Instance.new("UICorner", PlayerBtn).CornerRadius = UDim.new(0,7)
-        AddRainbowGlow(PlayerBtn,2)
-
-        PlayerBtn.MouseButton1Click:Connect(function()
-            SelectedPlayer = player
-
-            InfoName.Text = "Username: " .. player.Name
-            InfoDisplay.Text = "Display Name: " .. player.DisplayName
-            InfoAge.Text = "Account Age: " .. tostring(player.AccountAge) .. " days"
-
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                InfoStatus.Text = "Status: In server"
-                InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
-            else
-                InfoStatus.Text = "Status: Offline / not in world"
-                InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
-            end
-
-            for _, child in ipairs(PlayerListFrame:GetChildren()) do
-                if child:IsA("TextButton") then
-                    child.BackgroundColor3 = Color3.fromRGB(50,50,50)
-                end
-            end
-            PlayerBtn.BackgroundColor3 = Color3.fromRGB(25,120,25)
-        end)
-
-        y += 34
-    end
-
-    PlayerListFrame.CanvasSize = UDim2.new(0,0,0, math.max(y, 0))
-end
-
-local function UpdateSelectedInfo()
-    if not SelectedPlayer then
-        InfoName.Text = "Username: None"
-        InfoDisplay.Text = "Display Name: None"
-        InfoAge.Text = "Account Age: None"
-        InfoStatus.Text = "Status: Select a player"
-        InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
-        return
-    end
-
-    InfoName.Text = "Username: " .. SelectedPlayer.Name
-    InfoDisplay.Text = "Display Name: " .. SelectedPlayer.DisplayName
-    InfoAge.Text = "Account Age: " .. tostring(SelectedPlayer.AccountAge) .. " days"
-
-    if SelectedPlayer.Character and SelectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        InfoStatus.Text = "Status: In server"
-        InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
-    else
-        InfoStatus.Text = "Status: Offline / not in world"
-        InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
-    end
-end
-
-RefreshServerList()
-UpdateSelectedInfo()
-
-Players.PlayerAdded:Connect(function()
-    RefreshServerList()
-    UpdateSelectedInfo()
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-    if SelectedPlayer and SelectedPlayer == player then
-        SelectedPlayer = nil
-    end
-    RefreshServerList()
-    UpdateSelectedInfo()
-end)
-
-TPBtn.MouseButton1Click:Connect(function()
+FollowBtn.MouseButton1Click:Connect(function()
     if not SelectedPlayer then
         InfoStatus.Text = "Status: Select a player first"
         InfoStatus.TextColor3 = Color3.fromRGB(255,200,50)
         return
     end
 
-    local targetPlayer = SelectedPlayer
-    local targetRoot = targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
-    local localRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    IsFollowing = not IsFollowing
+    FollowBtn.Text = IsFollowing and "👁️ FOLLOWING" or "👁️ FOLLOW PLAYER"
+    FollowBtn.BackgroundColor3 = IsFollowing and Color3.fromRGB(100,200,100) or Color3.fromRGB(255,165,0)
 
-    if targetRoot and localRoot then
-        localRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 3, 0)
-        InfoStatus.Text = "Status: Teleported!"
-        InfoStatus.TextColor3 = Color3.fromRGB(80,255,120)
+    if IsFollowing then
+        InfoStatus.Text = "Status: Following..."
+        InfoStatus.TextColor3 = Color3.fromRGB(100,200,255)
+
+        while IsFollowing and SelectedPlayer and SelectedPlayer.Character do
+            local targetRoot = SelectedPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local localRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+            if targetRoot and localRoot then
+                localRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 3, 0)
+            else
+                IsFollowing = false
+                break
+            end
+
+            task.wait(0.1)
+        end
+
+        if IsFollowing then
+            IsFollowing = false
+            FollowBtn.Text = "👁️ FOLLOW PLAYER"
+            FollowBtn.BackgroundColor3 = Color3.fromRGB(255,165,0)
+            InfoStatus.Text = "Status: Follow stopped"
+            InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
+        end
     else
-        InfoStatus.Text = "Status: Target is not in world"
-        InfoStatus.TextColor3 = Color3.fromRGB(255,140,140)
+        InfoStatus.Text = "Status: Follow stopped"
+        InfoStatus.TextColor3 = Color3.fromRGB(200,200,200)
     end
 end)
 
